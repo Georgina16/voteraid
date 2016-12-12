@@ -1,3 +1,5 @@
+![](https://cloud.githubusercontent.com/assets/3597934/21085183/1d7f1308-bfc3-11e6-8111-12892e52c254.png)
+
 # VoterAid
 
 *Stop voter suppression at the source.*
