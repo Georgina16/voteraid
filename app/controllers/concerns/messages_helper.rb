@@ -5,7 +5,7 @@ module MessagesHelper
   
   def handler(req, message)
     puts "Incoming request status : #{req.status} - #{message.body}"
-    if req.process(:nil, message) #feeds the message into status state machine of Request
+    if req.process!(:nil, message) #feeds the message into status state machine of Request
       case req.status
           when :pending_responder
             return handle_help_request(req, message)
@@ -21,7 +21,7 @@ module MessagesHelper
 
   # status 3
   def handle_issue(req, message) #only gives more info for check in specific cases right now
-    if (req.issue == :check_in) #issue with checking in
+    if (req.check_in?) #issue with checking in
       info = find_poll_addr(req.address)
     end
     info = info || ""
@@ -54,7 +54,7 @@ module MessagesHelper
   # status 6
   def handle_responder(req,responder_id)
       if confirm_respondent(req, responder_id)
-        req.process(responder_id)
+        req.process!(responder_id)
         send_confirm_to_requester(req)
         return t(responder_offers_help)
       else
@@ -77,7 +77,7 @@ module MessagesHelper
   # helper status 6
   def confirm_respondent(req, responder_id)
    # check that respondent exist and request status is 6
-    if req.status != :pending_responder
+    if !req.pending_responder?
       return false
     end
     return !Responder.find(responder_id).nil?

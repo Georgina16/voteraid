@@ -18,7 +18,7 @@ class Request < ApplicationRecord
        }
   aasm column: :status, enum: true do
     state :new_request, initial: true
-    state :awaiting_address, :awaiting_issue, :check_need_responder, :await_description, :pending_responder, :responder_assigned, :pending_feedback, :resolved, :unresolved
+    state :awaiting_address, :awaiting_issue, :check_need_responder, :awaiting_desc, :pending_responder, :responder_assigned, :pending_feedback, :resolved, :unresolved
 
     event :process do
       transitions from: :new_request, to: :awaiting_address
@@ -37,7 +37,6 @@ class Request < ApplicationRecord
 
   def save_address(msg)
     self.address = msg.body
-    self.save
   end
 
   def save_issue(msg)
@@ -54,15 +53,15 @@ class Request < ApplicationRecord
     self.save
   end
 
-  def has_nearby_responders?
+  def has_nearby_responders?(*args)
     return Responder.near(self.address,50).count(:all) > 0
   end
 
   private
 
   def valid_issue?(msg)
-    digit = /\d/.match(msg.body).to_i
-    if digit > 0 and digit < issues.count
+    digit = /\d/.match(msg.body)[0].to_i
+    if digit > 0 and digit < Request.issues.count
       return digit
     else
       return false
