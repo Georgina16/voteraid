@@ -21,15 +21,60 @@ class Request < ApplicationRecord
     state :awaiting_address, :awaiting_issue, :check_need_responder, :await_description, :pending_responder, :responder_assigned, :pending_feedback, :resolved, :unresolved
 
     event :process do
-      transition from: :new_request, to: :awaiting_address
-      transition from: :awaiting_address, to: :awaiting_issue
-      transition from: :check_need_responder, to: :awaiting_desc
-      transition from: :pending_responder, to: :responder_assigned
-      transition from: :responder_assigned, to: :awaiting_feedback
+      transitions from: :new_request, to: :awaiting_address
+      transitions from: :awaiting_address, to: :awaiting_issue, after: Proc.new {|*args| save_address(*args) }
+      transitions from: :awaiting_issue, to: :check_need_responder, if: Proc.new {|*args| save_issue(*args) }
+      transitions from: :check_need_responder, to: :awaiting_desc, if: Proc.new {|*args| affirmative?(*args) }
+      transitions from: :check_need_responder, to: :resolved, if: Proc.new {|*args| negative?(*args) }
+      transitions from: :awaiting_desc, to: :pending_responder, if: Proc.new{|*args| has_nearby_responders?(*args)}
+      transitions from: :awaiting_desc, to: :unresolved
+      transitions from: :pending_responder, to: :responder_assigned
+      transitions from: :responder_assigned, to: :awaiting_feedback
     end
 
 
   end
 
+  def save_address(msg)
+    self.address = msg.body
+    self.save
+  end
+
+  def save_issue(msg)
+    digit = valid_issue?(msg)
+    if digit
+      self.issue = digit
+    else
+      return false
+    end
+  end
+
+  def set_responder(responder_id)
+    self.responder_id = responder_id
+    self.save
+  end
+
+  def has_nearby_responders?
+    return Responder.near(self.address,50).count(:all) > 0
+  end
+
+  private
+
+  def valid_issue?(msg)
+    digit = /\d/.match(msg.body).to_i
+    if digit > 0 and digit < issues.count
+      return digit
+    else
+      return false
+    end
+  end
+
+  def affirmative?(msg)
+    return /y(es)?/i =~ msg.body
+  end
+
+  def negative?(msg)
+    return /n(o)?/i =~ msg.body
+  end
 
 end
