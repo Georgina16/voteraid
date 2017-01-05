@@ -1,39 +1,50 @@
-  <%= form_for @responder do |f| %>
-  <%= f.label "First Name" %>
-  <%= f.text_field :fname, placeholder: "First Name", required: true %>
-  <br/>
+<%= form_for(@responder, class:"form-horizontal") do |f| %>
+  <div class="form-group">
+    <%= f.label "First Name", class: "col-xs-12 col-sm-3"%>
+    <%= f.text_field :fname, placeholder: "First Name", required: true, class:"col-xs-12 col-sm-7"%>
+  </div>
+  <div class="form-group">
+    <%= f.label "Last Name", class: "col-xs-12 col-sm-3"%>
+    <%= f.text_field :lname, placeholder: "Last Name", required: true, class:"col-xs-12 col-sm-7"%>
+  </div>
 
-  <%= f.label "Last Name" %>
-  <%= f.text_field :lname, placeholder: "Last Name", required: true %>
-  <br/>
+  <div class="form-group">
+    <%= f.label "Phone Number", class: "col-xs-12 col-sm-3" %>
+    <%= f.text_field :phone, placeholder: "Phone Number", required: true, class:"col-xs-12 col-sm-7"%>
+  </div>
 
-  <%= f.label "Phone Number" %>
-  <%= f.text_field :phone, placeholder: "Phone Number", required: true %>
-  <br/>
+  <div class="form-group">
+    <%= f.label "Email", class: "col-xs-12 col-sm-3" %>
+    <%= f.text_field :email, placeholder: "Email", required: true, class:"col-xs-12 col-sm-7" %>
+  </div>
 
-  <%= f.label "Email" %>
-  <%= f.text_field :email, placeholder: "Email", required: true %>
-  <br/>
+  <div class="form-group">
+    <%= f.label "Address", class: "col-xs-12 col-sm-3" %>
+    <%= f.text_field :address, placeholder: "123 Main St", required: true, class:"col-xs-12 col-sm-7" %>
+  </div>
 
-  <%= f.label "Address" %>
-  <%= f.text_field :address, placeholder: "123 Main St", required: true %>
-  <br />
+  <div class="form-group">
+    <%= f.label "City", class: "col-xs-12 col-sm-3" %>
+    <%= f.text_field :city, placholder: "City", required: true, class:"col-xs-12 col-sm-7" %>
+  </div>
 
-  <%= f.label "City" %>
-  <%= f.text_field :city, placholder: "City", required: true %>
+  <div class="form-group">
+    <%= f.label "State", class: "col-xs-12 col-sm-3" %>
+    <%= f.text_field :state, placeholder: "State", required: true, class:"col-xs-12 col-sm-7" %>
+  </div>
 
-  <%= f.label "State" %>
-  <%= f.text_field :state, placeholder: "State", required: true %>
-  <br/>
+  <div class="form-group">
+    <%= f.label "Zip Code", class: "col-xs-12 col-sm-3" %>
+    <%= f.text_field :zip, placeholder: "Zipcode", required: true, class:"col-xs-12 col-sm-7" %>
+  </div>
 
-  <%= f.label "Zip Code" %>
-  <%= f.text_field :zip, placeholder: "Zipcode", required: true %>
-  <br/>
+  <div class="form-group">
+    <%= f.label "Bar Number?", class: "col-xs-12 col-sm-3" %>
+    <%= f.text_field :barNum, placeholder: "Optional State Bar Number", required: false, class:"col-xs-12 col-sm-7" %>
+  </div>
+  </div>
 
-  <%= f.label "Bar Number?" %>
-  <%= f.text_field :barNum, placeholder: "Optional State Bar Number", required: false %>
-  <br/>
-
-
-  <%= f.submit "Submit", :class => 'btn btn-success' %>
-  <% end %>
+  <div class="row">
+    <%= f.submit "Submit", class: 'btn btn-success col-xs-12 col-sm-4 col-sm-offset-4' %>
+  </div>
+<% end %>

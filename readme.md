@@ -77,10 +77,18 @@ We welcome help from the community and we are open to pull requests. You can fin
     rails db:migrate
     ```
 
-6. Run!
+6. Create an .env file in the root directory with the following keys(requires Twilio/Google API keys)
+   ```
+   GOOGLE_API_KEY=
+   TWILIO_NUMBER=
+   TWILIO_SID=
+   TWILIO_TOKEN=
+   ```
+
+7. Run!
 
     ```
-    rails s
+    foreman start
     ```
 
 ## License

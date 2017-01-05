@@ -18,8 +18,7 @@ class MessagesController < ApplicationController
       @message = @req.messages.create({body: message_body})
     else
       if @responder
-        @req = Request.last
-        puts "Responder reply"
+        @req = Request.last #TEMPORARY PENDING KEY-VALUE CACHE OF RESPONDERS TO REQUESTS
       else
         @req = Request.find(session["request_id"])
       end
@@ -29,12 +28,10 @@ class MessagesController < ApplicationController
     boot_twilio
     @nearby = nil
     # when reply, test to return the nearest polling address
-    if @req.status == 5
-      @body, @nearby = handle_help_request(@req, @message)
-    elsif @responder and /Y(es)?/i.match(message_body)
+    if @responder and /Y(es)?/i.match(message_body)
       @body = handle_responder(@req, @responder.id)
     else
-      @body = handler(@req, @message)
+      @body, @nearby = handler(@req, @message)
     end
     sms = @client.messages.create(
       from: ENV["TWILIO_NUMBER"],
@@ -43,14 +40,12 @@ class MessagesController < ApplicationController
     )
     if @nearby
       from = ENV["TWILIO_NUMBER"]
-      issue = index_to_issue(@req.issue)
+      issue = t(@req.issue, scope: :issues)
       @nearby.each do |person|
-        session["request_id"] = @req.id
-        session["responder_id"] = person.id
         @client.account.messages.create(
           :from => from,
           :to => person.phone,
-          :body => "Hi, someone near #{@req.address} needs your help. The voter is experiencing this issue: " + issue +  "\nThey have described the issue as: #{@req.desc}. Please repond with Yes if you are able to help."
+          :body => t(:nearby, address: @req.address, issue: issue, desc: @req.desc)
         )
         puts "Sent request for help to #{person.fname}"
       end
@@ -63,25 +58,5 @@ class MessagesController < ApplicationController
     @client = Twilio::REST::Client.new(ENV["TWILIO_SID"], ENV["TWILIO_TOKEN"])
   end
 
-  def index_to_issue(index) 
-    case index
-    when 1
-      return "Problem with ID"
-    when 2
-      return "Name not on registration list"
-    when 3
-      return "Eligibility to vote was challenged"
-    when 4
-      return "Cannot check in at the poll"
-    when 5
-      return "Problem with voting machine"
-    when 6
-      return "Line to vote is too long"
-    when 7
-      return "Problem with provisional ballot"
-    when 8
-      return "Other"
-    end
-  end
 
 end

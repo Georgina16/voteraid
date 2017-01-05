@@ -21,3 +21,30 @@
 
 en:
   hello: "Hello world"
+  awaiting_address: "Welcome to VoterAid. Help is on the way! In order to assist you, we'll ask you a few questions. What's your address where you are registered to vote?\n Please respond with full street address, city and state."
+  awaiting_issue: "What do you need help with?\n1.Problem with ID\n2.Name not on registration list\n3.Eligibility to vote was challenged\n4.Can't check in at the poll\n5.Problem with voting machine\n6.Line to vote is too long\n7.Problem with provisional ballot\n8.Other\nText the number of the problem you are experiencing"
+  check_need_responder: "Would you still like to be connected to a responder? Text Yes or No"
+  awaiting_desc: "Could you provide describe the problem you are experiencing?"
+  pending_responder:  "We are finding a responder to help you. This should only take a few minutes."
+  responder_assigned: "We've matched you with someone in your local precinct. Contact %{responder} at %{phone}"
+  awaiting_feedback: "Could you please provide us some feedback into the resolution of your case?"
+  resolved: 'Congratulations! Your case has been resolved'
+  unresolved: 'We are sorry that we are unavailable to solve the issue right now'
+  process_error: "Sorry, I didn't quite get that.\n"
+  nearby: "Hi, someone near %{address} needs your help. The voter is experiencing this issue: %{issue} \nThey have described the issue as: %{desc}. Please repond with Yes if you are able to help."
+  responder_offers_help: "Thank you for helping. Voter should contact you shortly."
+  responder_already_assigned: "Thank you for offering your assistance. Someone else has already been assigned to this request."
+
+  issues:
+    unknown: "Issue unknown"
+    id_problem: "Problem with ID"
+    not_on_registration_list: "Name not on registration list"
+    eligibility_challenged: "Eligibility to vote was challenged"
+    check_in: "Cannot check in at the poll"
+    voting_machine: "Problem with voting machine"
+    line_too_long: "Line to vote is too long"
+    provisional_problem: "Problem with provisional ballot"
+    other: "Other"
+
+  issues_detail:
+    check_in:
