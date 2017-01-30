@@ -57,4 +57,6 @@ gem 'json'
 
 gem 'aasm'
 
+gem 'redis', '~>3.2'
+
 ruby '2.3.0'

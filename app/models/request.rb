@@ -22,11 +22,11 @@ class Request < ApplicationRecord
 
     event :process do
       transitions from: :new_request, to: :awaiting_address
-      transitions from: :awaiting_address, to: :awaiting_issue, after: Proc.new {|*args| save_address(*args) }
-      transitions from: :awaiting_issue, to: :check_need_responder, if: Proc.new {|*args| save_issue(*args) }
-      transitions from: :check_need_responder, to: :awaiting_desc, if: Proc.new {|*args| affirmative?(*args) }
-      transitions from: :check_need_responder, to: :resolved, if: Proc.new {|*args| negative?(*args) }
-      transitions from: :awaiting_desc, to: :pending_responder, if: Proc.new{|*args| has_nearby_responders?(*args)}
+      transitions from: :awaiting_address, to: :awaiting_issue, after: Proc.new {|_, message| save_address(message) }
+      transitions from: :awaiting_issue, to: :check_need_responder, if: Proc.new {|_, message| save_issue(message) }
+      transitions from: :check_need_responder, to: :awaiting_desc, if: Proc.new {|_, message| affirmative?(message) }
+      transitions from: :check_need_responder, to: :resolved, if: Proc.new {|_, message| negative?(message) }
+      transitions from: :awaiting_desc, to: :pending_responder, if: Proc.new{|_, message| has_nearby_responders? }
       transitions from: :awaiting_desc, to: :unresolved
       transitions from: :pending_responder, to: :responder_assigned
       transitions from: :responder_assigned, to: :awaiting_feedback
@@ -53,7 +53,7 @@ class Request < ApplicationRecord
     self.save
   end
 
-  def has_nearby_responders?(*args)
+  def has_nearby_responders?
     return Responder.near(self.address,50).count(:all) > 0
   end
 
