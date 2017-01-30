@@ -23,6 +23,7 @@ Keep an eye out on the list of extra stuff we want to add here. You can see them
 For our tech stack, we are using:
 - Ruby on Rails
 - PostgreSQL
+- Redis
 - Bootstrap
 - Twilio REST API
 - Heroku for Hosting
@@ -41,11 +42,13 @@ We welcome help from the community and we are open to pull requests. You can fin
     rbenv global 2.3.0
     ```
 
-2. Install and start PostgreSQL
+2. Install and start PostgreSQL & Redis
 
     ```
     brew install postgresql
     brew services start postgresql
+    brew install redis
+    redis-server
     ```
 
 3. Clone the repository and then change into the application's directory
@@ -83,6 +86,7 @@ We welcome help from the community and we are open to pull requests. You can fin
    TWILIO_NUMBER=
    TWILIO_SID=
    TWILIO_TOKEN=
+   REDIS_URL=
    ```
 
 7. Run!
